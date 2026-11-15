@@ -1,0 +1,84 @@
+name: Build Android
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Get JRE 8
+        uses: dawidd6/action-download-artifact@v9
+        with:
+          workflow: build.yml
+          path: app_pojavlauncher/src/main/assets/components/jre
+          workflow_conclusion: completed
+          repo: AngelAuraMC/angelauramc-openjdk-build
+          branch: buildjre8
+          name: jre8-pojav
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          validate-wrappers: false
+          gradle-version: "9.6.1"
+
+      - name: Prepare signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.NX_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+            echo "KEYSTORE_PATH=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+          fi
+
+      - name: Build APKs
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.NX_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.NX_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.NX_KEY_PASSWORD }}
+        run: |
+          set -o pipefail
+          ./scripts/languagelist_updater.sh
+          mkdir -p out
+          gradle --console=plain :app_pojavlauncher:assembleDebug :app_pojavlauncher:assembleRelease > build.log 2>&1 || { tail -n 60 build.log; exit 1; }
+          cp app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/PyEdition-debug.apk
+          cp app_pojavlauncher/build/outputs/apk/release/app_pojavlauncher-release.apk out/PyEdition-release.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PyEdition-debug-apk
+          path: out/PyEdition-debug.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PyEdition-release-apk
+          path: out/PyEdition-release.apk
+
+      - name: Write error report
+        if: failure()
+        run: |
+          {
+            echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo
+            grep -nE "^e: |error:|FAILURE|What went wrong" -A4 build.log | head -n 120 || true
+            echo
+            echo "--- last 200 lines ---"
+            tail -n 200 build.log 2>/dev/null || true
+          } > error.txt
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: error
+          path: error.txt
