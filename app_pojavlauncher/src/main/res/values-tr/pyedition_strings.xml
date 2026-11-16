@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pyedition_server_title">Sunucu durumu</string>
+    <string name="pyedition_server_check">Kontrol et</string>
+    <string name="pyedition_server_address">Adres</string>
+    <string name="pyedition_server_version">Sürüm</string>
+    <string name="pyedition_server_protocol">Protokol</string>
+    <string name="pyedition_server_players">Oyuncular</string>
+    <string name="pyedition_server_online">Çevrimiçi</string>
+    <string name="pyedition_server_latency">Gecikme</string>
+    <string name="pyedition_server_history">Son kullanılanlar</string>
+    <string name="pyedition_server_error_resolve">Sunucu adresi bulunamadı.</string>
+    <string name="pyedition_server_error_timeout">Sunucu zamanında yanıt vermedi.</string>
+    <string name="pyedition_server_error_connect">Sunucuya bağlanılamadı.</string>
+    <string name="pyedition_server_error_response">Sunucu geçerli bir durum göndermedi.</string>
+</resources>

@@ -53,12 +53,20 @@
 
 
 			<com.kdt.mcgui.LauncherMenuButton
+				android:id="@+id/server_status_button"
+				style="@style/LauncherMenuButton.Universal"
+				android:layout_width="match_parent"
+				android:drawableStart="@drawable/ic_menu_server_status"
+				android:text="@string/pyedition_server_title"
+				app:layout_constraintTop_toBottomOf="@id/news_button" />
+
+			<com.kdt.mcgui.LauncherMenuButton
 				android:id="@+id/custom_control_button"
 				style="@style/LauncherMenuButton.Universal"
 				android:layout_width="match_parent"
 				android:drawableStart="@drawable/ic_menu_custom_controls"
 				android:text="@string/mcl_option_customcontrol"
-				app:layout_constraintTop_toBottomOf="@id/news_button" />
+				app:layout_constraintTop_toBottomOf="@id/server_status_button" />
 
 			<com.kdt.mcgui.LauncherMenuButton
 				android:id="@+id/install_jar_button"

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pyedition_server_title">Server status</string>
+    <string name="pyedition_server_check">Check</string>
+    <string name="pyedition_server_address">Address</string>
+    <string name="pyedition_server_version">Version</string>
+    <string name="pyedition_server_protocol">Protocol</string>
+    <string name="pyedition_server_players">Players</string>
+    <string name="pyedition_server_online">Online</string>
+    <string name="pyedition_server_latency">Latency</string>
+    <string name="pyedition_server_history">Recent</string>
+    <string name="pyedition_server_error_resolve">The server address could not be found.</string>
+    <string name="pyedition_server_error_timeout">The server did not answer in time.</string>
+    <string name="pyedition_server_error_connect">Could not connect to the server.</string>
+    <string name="pyedition_server_error_response">The server sent no valid status.</string>
+</resources>
